@@ -64,15 +64,4 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
-
-      - name: Build APK
-        working-directory: ${{ env.APP_DIR }}/android
-        run: ./gradlew assembleDebug --no-daemon
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Katana-APK
-          path: ${{ env.APP_DIR }}/android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          java-
