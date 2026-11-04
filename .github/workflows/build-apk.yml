@@ -18,13 +18,12 @@ jobs:
 
       - name: Locate project folder
         run: |
-          DIR=$(find . -maxdepth 3 -name vite.mobile.config.ts -not -path '*/node_modules/*' -printf '%h\n' | head -n 1)
-          if [ -z "$DIR" ]; then
-            echo "::error::vite.mobile.config.ts not found. Upload ALL project files to the repository."
-            find . -maxdepth 2 -not -path './.git/*' | head -50
+          F=$(find . -maxdepth 3 -name vite.mobile.config.ts | grep -v node_modules | head -n 1)
+          if [ -z $F ]; then
+            echo ::error::vite.mobile.config.ts not found. Upload ALL project files to the repository.
             exit 1
           fi
-          echo "APP_DIR=$DIR" >> "$GITHUB_ENV"
+          echo APP_DIR=$(dirname $F) >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -64,4 +63,15 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-
+          java-version: 21
+
+      - name: Build APK
+        working-directory: ${{ env.APP_DIR }}/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Katana-APK
+          path: ${{ env.APP_DIR }}/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
