@@ -50,7 +50,7 @@ jobs:
 
       - name: Install Capacitor
         working-directory: ${{ env.APP_DIR }}
-        run: npm install --no-save --package-lock=false --no-audit --no-fund @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+        run: npm install --save-dev --no-audit --no-fund @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
       - name: Build game
         working-directory: ${{ env.APP_DIR }}
